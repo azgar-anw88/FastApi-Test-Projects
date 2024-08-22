@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm, HTTPBasic, HTTPBasicCredentials
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from schemas import ItemCreate, Item as ItemSchema
@@ -13,12 +13,12 @@ load_dotenv()
 
 app = FastAPI()
 
-auth_type = os.getenv("AUTH_TYPE","basic_auth") 
+auth_type = os.getenv("AUTH_TYPE", "basic_auth")
 
 if auth_type == "basic_auth":
     security = HTTPBasic()
 elif auth_type == "jwt_auth":
-    security = OAuth2PasswordBearer(tokenUrl="token")    
+    security = OAuth2PasswordBearer(tokenUrl="token")
 else:
     raise ValueError("Invalid AUTH_TYPE in configuration")
 
@@ -43,25 +43,23 @@ def authenticate_user(username: str, password: str):
         return user
     return None
 
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 @app.post("/token")
-def login_for_access_token(formdata:OAuth2PasswordRequestForm = Depends()):
+def login_for_access_token(formdata: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(formdata.username, formdata.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
-            headers={"WWW-Authenticate":"Bearer"},
+            headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=30)
     access_token = create_jwt_token(
-        data={"sub":user["username"]},
+        data={"sub": user["username"]},
         expires_delta=access_token_expires
     )
-    return {"access_token":access_token, "token_type":"bearer"}
+    return {"access_token": access_token, "token_type": "bearer"}
 
-def get_current_user_depends(credentials: HTTPBasicCredentials=Depends(security), token: str = Depends(security)):
+def get_current_user_depends(credentials: HTTPBasicCredentials = Depends(security), token: str = Depends(security)):
     if auth_type == 'basic_auth':
         user = authenticate_user(credentials.username, credentials.password)
         if not user:

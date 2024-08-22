@@ -5,11 +5,11 @@ x-cnf: &cnf
     driver: "json-file"
     options:
       max-size: "200k"
- 
+
 networks:
   ai-interviewee_app:
     name: ai-interviewee_app
- 
+
 services:
   postgres:
     image: postgres:16.2
@@ -25,7 +25,7 @@ services:
     volumes:
       - ./postgresdata:/var/lib/postgresql/data
     <<: *cnf
- 
+
   keycloak_db:
     image: postgres:16.2
     container_name: keycloak_db_ai-interviewee
@@ -39,7 +39,7 @@ services:
     ports:
       - "5866:5432"
     <<: *cnf
- 
+
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.1
     container_name: keycloak_ai-interviewee
@@ -53,12 +53,12 @@ services:
       KC_HOSTNAME: localhost
       KC_FEATURES: organization
     ports:
-      - "8081:8080"
+      - "8082:8080"
     command:
       - start-dev
     depends_on:
       - keycloak_db
     <<: *cnf
- 
+
 volumes:
   keycloak-pgdata:
