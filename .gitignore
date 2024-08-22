@@ -1,0 +1,4 @@
+__pycache__/
+mypython_venv/
+JWT_Auth/__pycache__/database.cpython-312.pyc
+JWT_Auth/__pycache__/main.cpython-312.pyc

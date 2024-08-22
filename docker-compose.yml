@@ -1,0 +1,22 @@
+version: '3.8'
+ 
+services:
+  postgres:
+    image: postgres:15
+    container_name: pgsql-container1
+    environment:
+      POSTGRES_DB: myanw
+      POSTGRES_USER: appnetwise
+      POSTGRES_PASSWORD: pass123
+    ports:
+      - "8888:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+ 
+volumes:
+  postgres_data:
+ 
+networks:
+  postgres_network:
