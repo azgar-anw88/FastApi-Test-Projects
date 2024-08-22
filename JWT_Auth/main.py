@@ -13,7 +13,7 @@ load_dotenv()
 
 app = FastAPI()
 
-auth_type = os.getenv("AUTH_TYPE","basic_auth") 
+auth_type = os.getenv("AUTH_TYPE","jwt_auth") 
 
 if auth_type == "basic_auth":
     security = HTTPBasic()
